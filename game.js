@@ -5,8 +5,13 @@ const socket = io();
 // Phaser game configuration
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: window.innerWidth,
+  height: window.innerHeight,
+  backgroundColor: "#000000",
+  scale: {
+    mode: Phaser.Scale.RESIZE,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
   scene: {
     preload: preload,
     create: create,
@@ -27,11 +32,14 @@ function preload() {
 }
 
 function create() {
+  const midX = this.scale.width / 2;
+  const midY = this.scale.height / 2;
+
   //   this.add.image(400, 300, "bomb1");
 
   // Join a game room
-  const roomCode = prompt("Enter Room Code:");
-  socket.emit("joinRoom", roomCode);
+  //   const roomCode = prompt("Enter Room Code:");
+  socket.emit("joinRoom", 11);
 
   // Handle server confirmations
   socket.on("joinedRoom", (room) => {
@@ -46,8 +54,12 @@ function create() {
 
   // Display the bomb
   //   bomb = this.add.circle(400, 300, 50, 0xff0000);
-  bomb = this.add.image(400, 300, "bomb1");
-  bomb.visible = false;
+  bomb = this.add.image(0, 0, "bomb1");
+  bomb.setOrigin(0.5);
+  bomb.setPosition(midX, midY * 0.5);
+  //   bomb.setOrigin(0.5);
+  bomb.scale = 5;
+  //   bomb.visible = false;
 
   // Handle bomb flash
   socket.on("bombFlash", () => {
@@ -56,7 +68,7 @@ function create() {
       this.tweens.add({
         targets: bomb,
         alpha: { from: 1, to: 0 },
-        duration: 500,
+        duration: 100,
         yoyo: true,
         repeat: -1,
       });
@@ -85,6 +97,22 @@ function create() {
       alert(`Game over! The winner is ${winnerId}`);
     }
   });
+
+  // Chatting List at the Bottom
+  //   const chatText = this.add.text(
+  //     midX,
+  //     midY * 1.5,
+  //     "Chat messages here... \n abc: dd \n cc: ㅋㅋㅋ 하ㄴ글",
+  //     {
+  //       font: "50px Arial",
+  //       color: "#000",
+  //       backgroundColor: "#f0f0f0",
+  //       padding: { x: 10, y: 10 },
+  //     }
+  //   );
+  //   chatText.setOrigin(0.5, 0);
+
+  this.scale.on("resize", resize, this);
 }
 
 function update() {
@@ -93,4 +121,25 @@ function update() {
 
 function startBombSequence() {
   // Additional logic if needed when bomb sequence starts
+}
+
+function resize(gameSize) {
+  const width = gameSize.width;
+  const height = gameSize.height;
+
+  this.cameras.resize(width, height);
+
+  // Update positions
+  this.children.getAll().forEach((child) => {
+    if (child.texture && child.texture.key === "bomb1") {
+      child.setPosition(width / 2, height / 2);
+    }
+    if (child.texture && child.texture.key === "logo") {
+      child.setPosition(width / 2, 50); // Adjust Y position as needed
+    }
+    if (child.style && child.style.font) {
+      // Text object for chat
+      child.setPosition(width / 2, height / 2 + 300); // Adjust Y position as needed
+    }
+  });
 }

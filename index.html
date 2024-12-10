@@ -3,10 +3,118 @@
   <head>
     <meta charset="UTF-8" />
     <title>Last Bomber</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+
+      #game-container {
+        margin: 0;
+        display: block;
+      }
+
+      #chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 600px;
+        background-color: rgba(0, 0, 0, 0.6); /* Transparent black background */
+        border-radius: 15px; /* Rounded corners */
+        padding: 10px;
+        box-sizing: border-box;
+        max-height: 400px;
+        overflow-y: auto;
+        font-family: Arial, sans-serif;
+        color: #fff; /* White text color for better contrast */
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      #chat-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        overflow-y: auto;
+        flex: 1;
+        font-size: 14px;
+        color: #f9f9f9;
+      }
+
+      #chat-list li {
+        margin-bottom: 5px;
+        padding: 5px 10px;
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.1
+        ); /* Light overlay for each message */
+        border-radius: 10px;
+      }
+
+      #chat-input-container {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      #chat-input {
+        flex: 1;
+        padding: 10px;
+        font-size: 14px;
+        border: none;
+        border-radius: 10px;
+        outline: none;
+        background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+        color: #fff;
+      }
+
+      #chat-input::placeholder {
+        color: #ddd;
+      }
+
+      #send-button {
+        padding: 10px 20px;
+        font-size: 14px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        background-color: #4caf50; /* Green button */
+        color: #fff;
+        transition: background-color 0.3s ease;
+      }
+
+      #send-button:hover {
+        background-color: #45a049; /* Slightly darker green on hover */
+      }
+    </style>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+    <script src="game.js"></script>
   </head>
   <body>
-    <script src="game.js"></script>
+    <div id="game-container"></div>
+    <div id="chat-container">
+      <ul id="chat-list">
+        <li>Welcome to Last Bomber!</li>
+        <li>Bomb will be detonated in 10 seconds!</li>
+        <li>Good Luck!!</li>
+        <li>Good Luck!!</li>
+        <li>Good Luck!!</li>
+        <li>Good Luck!!</li>
+        <li>Good Luck!!</li>
+        <li>Good Luck!!</li>
+        <li>Good Luck!!</li>
+      </ul>
+      <div id="chat-input-container">
+        <input type="text" id="chat-input" placeholder="Type a message..." />
+        <button id="send-button">Send</button>
+      </div>
+    </div>
   </body>
 </html>
